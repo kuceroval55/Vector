@@ -3,6 +3,8 @@ package cz.uhk.vedit.gui;
 import cz.uhk.vedit.model.Circle;
 import cz.uhk.vedit.model.Rectangle;
 import cz.uhk.vedit.model.Square;
+import cz.uhk.vedit.model.Triangle;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,5 +25,6 @@ public class VeditFrame extends JFrame {
         drawPanel.addObject(new Square(100,100, Color.RED,50));
         drawPanel.addObject(new Rectangle(500,60, Color.BLUE,60, 70));
         drawPanel.addObject(new Circle(300, 400, Color.BLACK, 60));
+        drawPanel.addObject(new Triangle(200, 400, Color.GREEN, 200));
     }
 }
