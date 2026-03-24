@@ -51,6 +51,14 @@ public class Triangle extends AbstractGraphicObject {
 
     @Override
     public boolean contains(Point p) {
-        return false;
+        if (p == null) return false;
+        Point[] vertexes = getVertexes(this.point);
+        Polygon polygon = new Polygon();
+
+        for (Point v : vertexes) {
+            polygon.addPoint(v.x, v.y);
+        }
+
+        return polygon.contains(p);
     }
 }
