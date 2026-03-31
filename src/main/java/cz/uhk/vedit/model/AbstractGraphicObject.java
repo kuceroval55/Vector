@@ -48,4 +48,8 @@ public abstract class AbstractGraphicObject {
     }
 
     public abstract boolean contains(Point p);
+
+    public void move(int dx, int dy){
+        point.translate(dx, dy);
+    }
 }

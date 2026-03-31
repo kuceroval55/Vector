@@ -17,6 +17,7 @@ public class DrawPanel extends JPanel {
     }
     private AbstractGraphicObject selected;
     private int dx,dy;
+    private Point oldMouse;
 
     private void initGui(){
         setBackground(Color.white);
@@ -27,8 +28,7 @@ public class DrawPanel extends JPanel {
             public void mousePressed(MouseEvent e) {
                 selected = findObjectUnderMouse(e.getPoint());
                 if(selected != null){
-                    dx = e.getX() - selected.getPoint().x;
-                    dy = e.getY() - selected.getPoint().y;
+                    oldMouse = e.getPoint();
                 }
             }
         });
@@ -37,7 +37,10 @@ public class DrawPanel extends JPanel {
             @Override
             public void mouseDragged(MouseEvent e) {
                 if(selected != null){
-                    selected.setPoint(e.getX()-dx, e.getY()-dy);
+                    int dx = e.getX() - oldMouse.x;
+                    int dy = e.getY() - oldMouse.y;
+                    selected.move(dx, dy);
+                    oldMouse = e.getPoint();
                     repaint(); //znovu preklesime
                 }
             }
@@ -56,6 +59,7 @@ public class DrawPanel extends JPanel {
 
     public void addObject(AbstractGraphicObject obj) {
         objects.add(obj);
+        repaint();
     }
 
     @Override
