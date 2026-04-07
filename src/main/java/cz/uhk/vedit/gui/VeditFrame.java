@@ -9,9 +9,24 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.Random;
 
 public class VeditFrame extends JFrame {
     private DrawPanel drawPanel = new DrawPanel();
+
+    private Random random = new Random();
+
+    private Color randomColor() {
+        return new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256));
+    }
+
+    private int randomPos(int max) {
+        return random.nextInt(max);
+    }
+
+    private int randomSize(int min, int max) {
+        return min + random.nextInt(max - min);
+    }
 
     public VeditFrame() {
         super("FIM Vector Editor");
@@ -37,28 +52,48 @@ public class VeditFrame extends JFrame {
         var actSquare = new AbstractAction("Square") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                drawPanel.addObject(new Square(10,10,Color.darkGray, 80));
+                int size = randomSize(30, 120);
+                drawPanel.addObject(new Square(
+                        randomPos(drawPanel.getWidth()),
+                        randomPos(drawPanel.getHeight()),
+                        randomColor(), size
+                ));
             }
         };
 
         var actRectangle = new AbstractAction("Rectangle") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                drawPanel.addObject(new Rectangle(10,10,Color.cyan, 100,150));
+                drawPanel.addObject(new Rectangle(
+                        randomPos(drawPanel.getWidth()),
+                        randomPos(drawPanel.getHeight()),
+                        randomColor(),
+                        randomSize(40, 150), randomSize(40, 150)
+                ));
             }
         };
 
         var actTriangle = new AbstractAction("Triangle") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                drawPanel.addObject(new Triangle(10,10,Color.orange, 70));
+                drawPanel.addObject(new Triangle(
+                        randomPos(drawPanel.getWidth()),
+                        randomPos(drawPanel.getHeight()),
+                        randomColor(),
+                        randomSize(30, 120)
+                ));
             }
         };
 
         var actCircle = new AbstractAction("Circle") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                drawPanel.addObject(new Circle(10,10,Color.pink, 30));
+                drawPanel.addObject(new Circle(
+                        randomPos(drawPanel.getWidth()),
+                        randomPos(drawPanel.getHeight()),
+                        randomColor(),
+                        randomSize(20, 80)
+                ));
             }
         };
 
@@ -79,10 +114,10 @@ public class VeditFrame extends JFrame {
     }
 
     private void initSampleData() {
-        drawPanel.addObject(new Square(100,100, Color.RED,50));
+        /*drawPanel.addObject(new Square(100,100, Color.RED,50));
         drawPanel.addObject(new Rectangle(500,60, Color.yellow,60, 70));
         drawPanel.addObject(new Circle(300, 400, Color.BLACK, 60));
-        drawPanel.addObject(new Triangle(200, 400, Color.GREEN, 200));
+        drawPanel.addObject(new Triangle(200, 400, Color.GREEN, 200));*/
 
         Group gr = new Group();
         drawPanel.addObject(gr);
