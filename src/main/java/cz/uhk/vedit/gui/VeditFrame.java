@@ -13,15 +13,14 @@ import java.util.Random;
 
 public class VeditFrame extends JFrame {
     private DrawPanel drawPanel = new DrawPanel();
-
     private Random random = new Random();
 
     private Color randomColor() {
         return new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256));
     }
 
-    private int randomPos(int max) {
-        return random.nextInt(max);
+    private int randomPos(int min, int max) {
+        return random.nextInt(min, max);
     }
 
     private int randomSize(int min, int max) {
@@ -53,47 +52,59 @@ public class VeditFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int size = randomSize(30, 120);
-                drawPanel.addObject(new Square(
-                        randomPos(drawPanel.getWidth()),
-                        randomPos(drawPanel.getHeight()),
-                        randomColor(), size
-                ));
+                Color color = randomColor();
+                int py =  randomPos(2, drawPanel.getHeight() - size - 2);
+                int px = randomPos(2, drawPanel.getWidth() - size - 2);
+                drawPanel.addObject(new Square(px, py, color, size));
             }
         };
 
         var actRectangle = new AbstractAction("Rectangle") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                drawPanel.addObject(new Rectangle(
-                        randomPos(drawPanel.getWidth()),
-                        randomPos(drawPanel.getHeight()),
-                        randomColor(),
-                        randomSize(40, 150), randomSize(40, 150)
-                ));
+                int sizeY = randomSize(40, 150);
+                int sizeX = randomSize(40, 150);
+                Color color = randomColor();
+                int px = randomPos(2, drawPanel.getWidth() - sizeX - 2);
+                int py = randomPos(2, drawPanel.getHeight() - sizeY - 2);
+                drawPanel.addObject(new Rectangle(px, py, color, sizeX, sizeY));
             }
         };
 
         var actTriangle = new AbstractAction("Triangle") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                drawPanel.addObject(new Triangle(
-                        randomPos(drawPanel.getWidth()),
-                        randomPos(drawPanel.getHeight()),
-                        randomColor(),
-                        randomSize(30, 120)
-                ));
+                int size =  randomSize(30, 150);
+                Color color = randomColor();
+
+                int halfOfC = (int) Math.ceil(Math.sqrt(
+                        Math.pow((2.0/3.0 * size), 2) -
+                        Math.pow((1.0/3.0 * size), 2)));
+                int centerToVertex = (int) Math.ceil(((double) size * (2.0/3.0)));
+                int centerToSide = (int) Math.ceil(((double) size * (1.0/3.0)));
+
+                int py = randomPos(centerToVertex, drawPanel.getHeight() - centerToSide);
+                int px = randomPos(halfOfC, drawPanel.getWidth() - halfOfC);
+                drawPanel.addObject(new Triangle(px,  py, color, size));
             }
         };
 
         var actCircle = new AbstractAction("Circle") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                drawPanel.addObject(new Circle(
-                        randomPos(drawPanel.getWidth()),
-                        randomPos(drawPanel.getHeight()),
-                        randomColor(),
-                        randomSize(20, 80)
-                ));
+                int size =  randomSize(20, 80);
+                Color color = randomColor();
+                int px = randomPos(size, drawPanel.getWidth() - size);
+                int py = randomPos(size, drawPanel.getHeight() - size);
+                drawPanel.addObject(new Circle(px,  py, color, size));
+            }
+        };
+
+
+        var actClear = new AbstractAction("Delete") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawPanel.clearCanvas();
             }
         };
 
@@ -110,6 +121,9 @@ public class VeditFrame extends JFrame {
         actSquare.putValue(AbstractAction.ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_F2,0)); //spusteni klavesou F2, ale musi byt v menu
         tb.add(actSquare);
 
+        actClear.putValue(AbstractAction.SHORT_DESCRIPTION, "Clear Canvas");
+        tb.add(actClear);
+
         return tb;
     }
 
@@ -123,5 +137,6 @@ public class VeditFrame extends JFrame {
         drawPanel.addObject(gr);
         gr.addObject(new Triangle(300, 200, Color.magenta, 100));
         gr.addObject(new Circle(300, 200, Color.blue, 50));
+        gr.addObject(new Square(100, 0, Color.blue, 50));
     }
 }

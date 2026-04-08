@@ -61,6 +61,10 @@ public class DrawPanel extends JPanel {
         objects.add(obj);
         repaint();
     }
+    public void clearCanvas() {
+        objects.clear();
+        repaint();
+    }
 
     @Override
     public void paint(Graphics g) {
