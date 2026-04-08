@@ -10,6 +10,11 @@ import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 public class DrawPanel extends JPanel {
     public DrawPanel(List<AbstractGraphicObject> objects) {
         this.objects = objects;
@@ -64,6 +69,27 @@ public class DrawPanel extends JPanel {
     public void clearCanvas() {
         objects.clear();
         repaint();
+    }
+
+    public void saveToPNG() {
+        JFileChooser chooser = new JFileChooser();      // vytvoření dialogového okna na výběr souboru
+        chooser.setDialogTitle("Save canvas to PNG");
+        int userSelection = chooser.showSaveDialog(this);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {     // pokud uživat potvrdil výběr
+            File file = chooser.getSelectedFile();
+            if (!file.getAbsolutePath().endsWith(".png")) {         // aby nám nevytvořil binárku
+                file = new File(file.getAbsolutePath() + ".png");
+            }
+            try {
+                BufferedImage image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
+                Graphics2D g2d = image.createGraphics();        // vztvořím "kreslící hlavu která kreslí do našeho obrázku"
+                this.paint(g2d);            // předám kreslící hlavě instrukce aby kreslila to co je v DrawPanelu
+                g2d.dispose();
+                ImageIO.write(image, "png", file);          // vše uložím do nového souboru
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Can't save canvas to PNG");
+            }
+        }
     }
 
     @Override

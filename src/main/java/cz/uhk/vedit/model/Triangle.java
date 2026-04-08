@@ -53,7 +53,7 @@ public class Triangle extends AbstractGraphicObject {
     public boolean contains(Point p) {
         if (p == null) return false;
         Point[] vertexes = getVertexes(this.point);
-        Polygon polygon = new Polygon();
+        java.awt.Polygon polygon = new java.awt.Polygon();
 
         for (Point v : vertexes) {
             polygon.addPoint(v.x, v.y);

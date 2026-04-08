@@ -1,6 +1,7 @@
 package cz.uhk.vedit.gui;
 
 import cz.uhk.vedit.model.*;
+import cz.uhk.vedit.model.Polygon;
 import cz.uhk.vedit.model.Rectangle;
 
 
@@ -53,8 +54,8 @@ public class VeditFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int size = randomSize(30, 120);
                 Color color = randomColor();
-                int py =  randomPos(2, drawPanel.getHeight() - size - 2);
-                int px = randomPos(2, drawPanel.getWidth() - size - 2);
+                int py =  randomPos(0, drawPanel.getHeight() - size);
+                int px = randomPos(0, drawPanel.getWidth() - size);
                 drawPanel.addObject(new Square(px, py, color, size));
             }
         };
@@ -65,8 +66,8 @@ public class VeditFrame extends JFrame {
                 int sizeY = randomSize(40, 150);
                 int sizeX = randomSize(40, 150);
                 Color color = randomColor();
-                int px = randomPos(2, drawPanel.getWidth() - sizeX - 2);
-                int py = randomPos(2, drawPanel.getHeight() - sizeY - 2);
+                int px = randomPos(0, drawPanel.getWidth() - sizeX);
+                int py = randomPos(0, drawPanel.getHeight() - sizeY);
                 drawPanel.addObject(new Rectangle(px, py, color, sizeX, sizeY));
             }
         };
@@ -100,6 +101,18 @@ public class VeditFrame extends JFrame {
             }
         };
 
+        var actPolygon = new AbstractAction("Polygon") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int size =  randomSize(20, 100);
+                Color color = randomColor();
+                int py = randomPos(size, drawPanel.getHeight() - size);
+                int px = randomPos(size, drawPanel.getWidth() - size);
+                int vertexes = randomSize(4,10);
+                drawPanel.addObject(new Polygon(px, py, color, size, vertexes));
+            }
+        };
+
 
         var actClear = new AbstractAction("Delete") {
             @Override
@@ -108,8 +121,18 @@ public class VeditFrame extends JFrame {
             }
         };
 
+        var actSavePNG = new AbstractAction("Save canvas to PNG") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawPanel.saveToPNG();
+            }
+        };
+
         actTriangle.putValue(AbstractAction.SHORT_DESCRIPTION, "Paint triangle");
         tb.add(actTriangle);
+
+        actPolygon.putValue(AbstractAction.SHORT_DESCRIPTION, "Paint polygon");
+        tb.add(actPolygon);
 
         actTriangle.putValue(AbstractAction.SHORT_DESCRIPTION, "Paint Rectangle");
         tb.add(actRectangle);
@@ -123,6 +146,9 @@ public class VeditFrame extends JFrame {
 
         actClear.putValue(AbstractAction.SHORT_DESCRIPTION, "Clear Canvas");
         tb.add(actClear);
+
+        actSavePNG.putValue(AbstractAction.SHORT_DESCRIPTION, "Save canvas to PNG");
+        tb.add(actSavePNG);
 
         return tb;
     }
@@ -138,5 +164,6 @@ public class VeditFrame extends JFrame {
         gr.addObject(new Triangle(300, 200, Color.magenta, 100));
         gr.addObject(new Circle(300, 200, Color.blue, 50));
         gr.addObject(new Square(100, 0, Color.blue, 50));
+        gr.addObject(new Polygon(100, 200, Color.yellow, 50, 6));
     }
 }
